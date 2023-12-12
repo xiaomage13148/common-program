@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {renameCodeVariable} from '@/utils/astUtil';
+import {renameCodeVariable, testFunction} from '@/utils/astUtil';
 import {ruleTypeConstant} from '@/utils/astUtil/constant';
 
 export default {
@@ -49,8 +49,12 @@ export default {
     var variable1 = 42;
     let variable2 = 'hello';
     const variable3 = true;
+    const $00sjs_00whey00 = 'xiaomi';
+    variable2 = '一只小莹莹';
 `;
     renameCodeVariable(jsCode, ruleTypeConstant.onlyEnglishAndNumberExist);
+
+    // testFunction();
   }
 };
 </script>

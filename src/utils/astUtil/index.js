@@ -1,6 +1,9 @@
 /**
  * JS AST语法解析器
  */
+import {ruleTypeConstant} from '@/utils/astUtil/constant';
+import {onlyEnglishAndNumberExistMethod} from '@/utils/astUtil/ruleTypeMethodUtil';
+
 const esprima = require('esprima');
 
 const escodegen = require('escodegen');
@@ -17,6 +20,7 @@ export const renameCodeVariable = (jsCode, ruleType) => {
     // 遍历 AST（抽象语法树）
     parseCode.body.forEach(statement => {
         if (statement.type === 'VariableDeclaration') {
+            const kind = statement.kind;
             // 对每个变量声明进行处理
             statement.declarations.forEach(declaration => {
                 if (declaration.id.type === 'Identifier') {
@@ -24,26 +28,42 @@ export const renameCodeVariable = (jsCode, ruleType) => {
                     const variableName = declaration.id.name;
 
                     // 修改变量名，这里可以根据你的需求进行修改逻辑
-                    const modifiedVariableName = 'new_' + variableName;
+                    let modifiedVariableName = '';
+                    if (ruleType === ruleTypeConstant.onlyEnglishAndNumberExist) {
+                        modifiedVariableName = onlyEnglishAndNumberExistMethod(variableName, kind);
+                    }
 
-                    // 在这里输出修改后的变量名
-                    console.log(`Original: ${variableName}, Modified: ${modifiedVariableName}`);
-
-                    // 修改变量名的范围，这是可选的，如果需要改变源代码中的变量名，你可能需要这个范围信息
-                    declaration.id.range[0] = 0;
-                    declaration.id.range[1] = modifiedVariableName.length;
-
-                    // 修改变量名
-                    declaration.id.name = modifiedVariableName;
+                    if (modifiedVariableName !== '') {
+                        // 修改变量名
+                        declaration.id.name = modifiedVariableName;
+                    }
                 }
             });
         }
     });
-
-    // // TODO ---->打印parseCode , 日期: 2023/12/12
-    // console.log(`---->打印parseCode , 当前时间是: ${new Date().toString()}`, parseCode);
-
     const generateCode = escodegen.generate(parseCode);
     // TODO ---->打印generateCode , 日期: 2023/12/12
     console.log(`---->打印generateCode , 当前时间是: ${new Date().toString()}`, generateCode);
+};
+
+
+/**
+ * 测试函数
+ */
+export const testFunction = () => {
+    const inputString = 'Hello123 World456';
+
+    const strings = inputString.split('');
+    // TODO ---->打印strings , 日期: 2023/12/12
+    console.log(`---->打印strings , 当前时间是: ${new Date().toString()}`, strings);
+
+
+// 使用正则表达式匹配英文和数字
+    const matches = inputString.match(/[a-zA-Z0-9]+/g);
+
+// 输出匹配结果
+//     console.log(matches);
+    // TODO ---->打印matches , 日期: 2023/12/12
+    console.log(`---->打印matches , 当前时间是: ${new Date().toString()}`, matches);
+
 };
