@@ -33,6 +33,7 @@ export const renameCodeVariable = (jsCode, ruleType) => {
                         modifiedVariableName = onlyEnglishAndNumberExistMethod(variableName, kind);
                     }
 
+                    // TODO 修改变量名这里存在问题
                     if (modifiedVariableName !== '') {
                         // 修改变量名
                         declaration.id.name = modifiedVariableName;
